@@ -1,0 +1,100 @@
+/* ── Design System & Global Styles ─────────────────────────────── */
+/* Light professional theme — modeled after ArcGIS Online / Portal */
+
+:root {
+  /* ── Colors ── */
+  --bg-primary:    #ffffff;
+  --bg-secondary:  #f7f8fa;
+  --bg-surface:    #f1f3f5;
+  --bg-hover:      #edf0f4;
+  --bg-active:     #e8f0fe;
+
+  --text-primary:   #1d1d1f;
+  --text-secondary: #52555a;
+  --text-muted:     #8a8d93;
+
+  --accent:         #0079c1;          /* Esri blue */
+  --accent-dim:     rgba(0, 121, 193, 0.08);
+  --accent-light:   rgba(0, 121, 193, 0.12);
+
+  --border:         #e1e4e8;
+  --border-light:   #eaecef;
+
+  /* ── Typography ── */
+  --font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
+
+  /* ── Layout ── */
+  --header-height: 52px;
+  --sidebar-width: 320px;
+
+  /* ── Radius ── */
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* ── Shadows ── */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.1);
+
+  /* ── Transitions ── */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Reset ── */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: var(--font-family);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── App Grid Layout ─────────────────────────────────────────── */
+.app-layout {
+  display: grid;
+  grid-template-rows: var(--header-height) 1fr;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  grid-template-areas:
+    "header  header"
+    "sidebar map";
+  height: 100%;
+  width: 100%;
+}
+
+/* ── Scrollbar ────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #c4c8cc;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a0a4a8;
+}
+
+/* ── ArcGIS Widget Overrides ─────────────────────────────────── */
+.esri-widget {
+  font-family: var(--font-family) !important;
+}
+.esri-ui-corner .esri-component {
+  box-shadow: var(--shadow-md);
+}
