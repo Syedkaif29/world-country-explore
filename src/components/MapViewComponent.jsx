@@ -264,9 +264,19 @@ export default function MapViewComponent({ selectedCountry, onDeselectCountry })
         // Highlight all geometries for this country
         highlightRef.current = layerView.highlight(features);
 
-        // Zoom to the country (left padding accounts for sidebar)
+        // Zoom to the country — on desktop we offset left for the
+        // sidebar; on mobile the sidebar is a closed drawer so no offset.
+        const isMobile = window.innerWidth < 768;
         view.goTo(
-          { target: features, padding: { top: 50, bottom: 50, left: 350, right: 50 } },
+          {
+            target: features,
+            padding: {
+              top: 50,
+              bottom: 50,
+              left: isMobile ? 30 : 350,
+              right: 30,
+            },
+          },
           { duration: 1500, easing: "ease-in-out" }
         );
 

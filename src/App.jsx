@@ -17,33 +17,34 @@ import { FEATURE_LAYER_URL } from "./utils/mapUtils";
  *   │          │                          │
  *   └──────────┴──────────────────────────┘
  *
+ * On mobile (< 768px), the sidebar becomes a slide-in drawer
+ * toggled via a hamburger button in the header.
+ *
  * State lives here so both Sidebar and Map can communicate:
  *  - countries:        full list of {name, continent} objects
  *  - selectedCountry:  the country name the user picked
  *  - loading:          true while the initial query runs
+ *  - sidebarOpen:      whether sidebar drawer is visible (mobile)
  */
 export default function App() {
   const [countries, setCountries] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // ── Load country list once on mount ────────────────────────────
-  // We use FeatureLayer.queryFeatures() rather than a raw fetch()
-  // because it gives us typed FeatureSets, handles pagination,
-  // and respects the layer's spatial reference automatically.
   useEffect(() => {
     const layer = new FeatureLayer({ url: FEATURE_LAYER_URL });
 
     layer
       .queryFeatures({
-        where: "LAND_TYPE = 'Primary Land'", // one entry per country
+        where: "LAND_TYPE = 'Primary Land'",
         outFields: ["COUNTRY", "CONTINENT"],
         orderByFields: ["COUNTRY ASC"],
-        returnGeometry: false,               // we only need names here
-        num: 300,                            // more than enough
+        returnGeometry: false,
+        num: 300,
       })
       .then((result) => {
-        // De-duplicate in case of any remaining duplicates
         const seen = new Set();
         const list = [];
         for (const f of result.features) {
@@ -62,25 +63,40 @@ export default function App() {
       .finally(() => setLoading(false));
   }, []);
 
-  // Memoised callback so Sidebar doesn't re-render MapViewComponent
+  // When a country is selected, auto-close the drawer on mobile
   const handleSelectCountry = useCallback((countryName) => {
     setSelectedCountry(countryName);
+    setSidebarOpen(false);
   }, []);
 
-  // Called when the popup is closed — clears the map highlight
-  // and resets the sidebar selection.
   const handleDeselectCountry = useCallback(() => {
     setSelectedCountry(null);
   }, []);
 
+  const toggleSidebar = useCallback(() => {
+    setSidebarOpen((prev) => !prev);
+  }, []);
+
+  const closeSidebar = useCallback(() => {
+    setSidebarOpen(false);
+  }, []);
+
   return (
     <div className="app-layout">
-      <Header />
+      <Header onToggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} />
+
+      {/* Backdrop overlay — visible only on mobile when sidebar is open */}
+      {sidebarOpen && (
+        <div className="sidebar-backdrop" onClick={closeSidebar} />
+      )}
+
       <Sidebar
         countries={countries}
         loading={loading}
         selectedCountry={selectedCountry}
         onSelectCountry={handleSelectCountry}
+        isOpen={sidebarOpen}
+        onClose={closeSidebar}
       />
       <MapViewComponent
         selectedCountry={selectedCountry}

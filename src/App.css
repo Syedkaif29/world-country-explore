@@ -13,7 +13,7 @@
   --text-secondary: #52555a;
   --text-muted:     #8a8d93;
 
-  --accent:         #0079c1;          /* Esri blue */
+  --accent:         #0079c1;
   --accent-dim:     rgba(0, 121, 193, 0.08);
   --accent-light:   rgba(0, 121, 193, 0.12);
 
@@ -64,7 +64,7 @@ body,
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── App Grid Layout ─────────────────────────────────────────── */
+/* ── App Grid Layout (Desktop) ───────────────────────────────── */
 .app-layout {
   display: grid;
   grid-template-rows: var(--header-height) 1fr;
@@ -74,6 +74,11 @@ body,
     "sidebar map";
   height: 100%;
   width: 100%;
+}
+
+/* ── Sidebar Backdrop (mobile only) ──────────────────────────── */
+.sidebar-backdrop {
+  display: none;
 }
 
 /* ── Scrollbar ────────────────────────────────────────────────── */
@@ -97,4 +102,45 @@ body,
 }
 .esri-ui-corner .esri-component {
   box-shadow: var(--shadow-md);
+}
+
+/* ══════════════════════════════════════════════════════════════ */
+/* ══  MOBILE RESPONSIVE  (< 768px)  ══════════════════════════ */
+/* ══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 767px) {
+  :root {
+    --header-height: 48px;
+  }
+
+  /* Stack layout: header on top, map fills the rest */
+  .app-layout {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "map";
+  }
+
+  /* Semi-transparent backdrop behind sidebar drawer */
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 199;
+    background: rgba(0, 0, 0, 0.35);
+    animation: fade-in 0.2s ease;
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+}
+
+/* ══  TABLET  (768px – 1024px)  ══════════════════════════════ */
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  :root {
+    --sidebar-width: 280px;
+  }
 }

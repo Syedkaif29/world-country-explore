@@ -3,12 +3,44 @@ import "./Header.css";
 /**
  * Header
  * ------
- * Fixed top bar with app title and subtle branding.
- * Uses a gradient background with glassmorphism for premium feel.
+ * Fixed top bar with app title, branding badges, and a hamburger
+ * menu button that is visible only on mobile (< 768px).
  */
-export default function Header() {
+export default function Header({ onToggleSidebar, sidebarOpen }) {
   return (
     <header className="header" id="app-header">
+      {/* ── Hamburger button (mobile only) ── */}
+      <button
+        className="header__menu-btn"
+        onClick={onToggleSidebar}
+        aria-label={sidebarOpen ? "Close menu" : "Open menu"}
+        title={sidebarOpen ? "Close menu" : "Open menu"}
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          {sidebarOpen ? (
+            /* X icon when open */
+            <>
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </>
+          ) : (
+            /* Hamburger icon when closed */
+            <>
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </>
+          )}
+        </svg>
+      </button>
+
       <div className="header__brand">
         {/* Globe SVG icon */}
         <svg

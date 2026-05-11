@@ -11,6 +11,33 @@
   z-index: 100;
 }
 
+/* ── Hamburger button (hidden on desktop) ── */
+.header__menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.12s ease, background 0.12s ease;
+}
+
+.header__menu-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.header__menu-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
 /* ── Brand ── */
 .header__brand {
   display: flex;
@@ -67,4 +94,28 @@
   background: var(--accent-dim);
   border-color: var(--accent-light);
   color: var(--accent);
+}
+
+/* ── Mobile ── */
+@media (max-width: 767px) {
+  .header {
+    padding: 0 12px;
+    gap: 10px;
+  }
+
+  .header__menu-btn {
+    display: flex;
+  }
+
+  .header__title {
+    font-size: 0.82rem;
+  }
+
+  .header__subtitle {
+    display: none;
+  }
+
+  .header__meta {
+    display: none;
+  }
 }
